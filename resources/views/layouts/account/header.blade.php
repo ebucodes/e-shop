@@ -1,0 +1,50 @@
+<header class="cr-header">
+    <div class="container-fluid">
+        <div class="cr-header-items">
+            <div class="left-header">
+                <a href="javascript:void(0)" class="cr-toggle-sidebar">
+                    <span class="outer-ring">
+                        <span class="inner-ring"></span>
+                    </span>
+                </a>
+                <div class="header-search-box">
+                    <div class="header-search-drop">
+                        <a href="javascript:void(0)" class="open-search"><i class="ri-search-line"></i></a>
+                        <form class="cr-search">
+                            <input class="search-input" type="text" placeholder="Search...">
+                            <a href="javascript:void(0)" class="search-btn"><i class="ri-search-line"></i>
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="right-header">
+                <div class="cr-right-tool cr-user-drop">
+                    <div class="cr-hover-drop">
+                        <div class="cr-hover-tool">
+                            <i class="ri-account-circle-fill"></i>
+                            <span>{{ ucfirst(auth()->user()->role)}}</span>
+                        </div>
+                        <div class="cr-hover-drop-panel right">
+                            <div class="details">
+                                <h6>{{ auth()->user()->firstName .' '. auth()->user()->lastName}}</h6>
+                                <p>{{ auth()->user()->email}}</p>
+                            </div>
+                            <ul class="border-top">
+                                <li><a href="team-profile.html">Profile</a></li>
+                                <li><a href="{{ route('myLogs') }}">My Logs</a></li>
+                                <li><a href="chatapp.html">Messages</a></li>
+                                <li><a href="project-overview.html">Projects</a></li>
+                                <li><a href="team-update.html">Settings</a></li>
+                            </ul>
+                            <ul class="border-top">
+                                <li><a href="{{ route('logOut') }}"><i class="ri-logout-circle-r-line"></i>Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

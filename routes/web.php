@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\WebsiteController;
+use App\Http\Middleware\PreventBackHistory;
+use App\Http\Middleware\UserRole;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/', function () {
@@ -22,20 +25,34 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 //
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('dashboard', [AdminController::class, 'dashboard'])->name('adminDashboard');
-    // category
-    Route::group(['prefix' => 'category'], function () {
-        Route::get('/', [AdminController::class, 'categoryIndex'])->name('categoryIndex');
-        Route::post('store', [AdminController::class, 'categoryStore'])->name('categoryStore');
-        Route::post('update', [AdminController::class, 'categoryUpdate'])->name('categoryUpdate');
-        Route::post('delete', [AdminController::class, 'categoryDelete'])->name('categoryDelete');
+Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
+    // admin
+    Route::group(['middleware' => ['userRole:admin']], function () {
+        Route::group(['prefix' => 'admin'], function () {
+            Route::get('dashboard', [AdminController::class, 'dashboard'])->name('adminDashboard');
+            Route::get('all-logs', [AdminController::class, 'allLogs'])->name('allLogs');
+            // category
+            Route::group(['prefix' => 'category'], function () {
+                Route::get('/', [AdminController::class, 'categoryIndex'])->name('categoryIndex');
+                Route::post('store', [AdminController::class, 'categoryStore'])->name('categoryStore');
+                Route::post('update', [AdminController::class, 'categoryUpdate'])->name('categoryUpdate');
+                Route::post('delete', [AdminController::class, 'categoryDelete'])->name('categoryDelete');
+            });
+            // sub-category
+            Route::group(['prefix' => 'sub-category'], function () {
+                Route::get('/', [AdminController::class, 'subCategoryIndex'])->name('subCategoryIndex');
+                Route::post('store', [AdminController::class, 'subCategoryStore'])->name('subCategoryStore');
+                Route::post('update', [AdminController::class, 'subCategoryUpdate'])->name('subCategoryUpdate');
+                Route::post('delete', [AdminController::class, 'subCategoryDelete'])->name('subCategoryDelete');
+            });
+        });
     });
-    // sub-category
-    Route::group(['prefix' => 'sub-category'], function () {
-        Route::get('/', [AdminController::class, 'subCategoryIndex'])->name('subCategoryIndex');
-        Route::post('store', [AdminController::class, 'subCategoryStore'])->name('subCategoryStore');
-        Route::post('update', [AdminController::class, 'subCategoryUpdate'])->name('subCategoryUpdate');
-        Route::post('delete', [AdminController::class, 'subCategoryDelete'])->name('subCategoryDelete');
+
+    // seller
+    Route::group(['middleware' => ['userRole:seller']], function () {
+        Route::group(['prefix' => 'seller'], function () {
+            Route::get('dashboard', [SellerController::class, 'dashboard'])->name('sellerDashboard');
+            Route::get('profile', [SellerController::class, 'profile'])->name('sellerProfile');
+        });
     });
-})->middleware('auth', 'userType:admin', 'preventBackHistory');
+});

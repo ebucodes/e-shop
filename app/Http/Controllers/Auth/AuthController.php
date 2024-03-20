@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\SellerProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -81,6 +82,15 @@ class AuthController extends Controller
             if (auth()->user()->role == 'admin') {
                 return redirect()->route('adminDashboard')->with('success', "Welcome to the eShop, {$user->firstName}");
             }
+            //  if user is seller
+            if (auth()->user()->role == 'seller') {
+                // $sellerProfile = SellerProfile::where('userID', auth()->user()->id)->first();
+                $sellerProfile = SellerProfile::find(auth()->user()->id);
+                if ($sellerProfile == null) {
+                    return redirect()->route('sellerProfile')->with('info', "You need to complete your seller profile to activate your eShop account");
+                }
+                return redirect()->route('sellerDashboard')->with('success', "Welcome to the eShop, {$user->firstName}");
+            }
         } else {
             // Invalid credentials
             return redirect()->route('login')->with('error', 'Invalid credentials.');
@@ -95,6 +105,6 @@ class AuthController extends Controller
         logAction(auth()->user()->email, 'Logged Out', $logMessage, $request->ip(), $request->userAgent());
         //
         Auth::logout();
-        return redirect()->route('login')->with('error', "Goodbye");
+        return redirect()->route('login')->with('success', "Goodbye");
     }
 }

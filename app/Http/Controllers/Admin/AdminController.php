@@ -18,6 +18,13 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('pageTitle', 'logs'));
     }
 
+    //
+    public function allLogs()
+    {
+        $pageTitle = "All Logs";
+        $collection = Activity::orderBy('created_at', 'DESC')->get();
+        return view('admin.all-logs', compact('pageTitle', 'collection'));
+    }
 
     //
     public function categoryIndex()
@@ -94,6 +101,7 @@ class AdminController extends Controller
     {
         $pageTitle = 'Sub Category';
         $collection = SubCategory::orderBy('created_at', 'DESC')->get();
+        $subCategoriesFormatted = [];
         $categories = Category::get();
         return view('admin.sub-category', compact('pageTitle', 'collection', 'categories'));
     }
@@ -127,17 +135,41 @@ class AdminController extends Controller
     }
 
     //
-    public function subCategoryUpdate()
+    public function subCategoryUpdate(Request $request)
     {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
+        $id = $request->id;
+
+        $validated = $request->validate([
+            'name' => 'bail|required',
+            'desc' => 'bail|required',
+            'category' => 'bail|required'
+        ]);
+
+        if ($validated) {
+            $category = SubCategory::find($id);
+            $category->update(['name' => $request->name, 'desc' => $request->desc, 'category' => json_encode($request->category), 'status' => $request->status]);
+            // log activity
+            $logMessage = auth()->user()->email . " updated a sub-category";
+            logAction(auth()->user()->email, 'Updated a Sub-Category', $logMessage, $request->ip(), $request->userAgent());
+            //
+            return redirect()->back()->with('success', "Updated successfully");
+        } else {
+            // If there are validation errors, you can return to the form with the errors
+            return back()->withErrors($validated);
+        }
     }
 
     //
-    public function subCategoryDelete()
+    public function subCategoryDelete(Request $request)
     {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
+        $id = $request->id;
+        $category = SubCategory::find($id);
+        $category->delete();
+        // log activity
+        $logMessage = auth()->user()->email . " deleted a sub-category";
+        logAction(auth()->user()->email, 'Deleted a Sub-Category', $logMessage, $request->ip(), $request->userAgent());
+        //
+        return redirect()->back()->with('success', "Deleted successfully");
     }
     //
     public function blogIndex()

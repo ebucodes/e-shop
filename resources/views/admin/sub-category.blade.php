@@ -109,31 +109,49 @@
                                         <td>{{ $i++ }}</td>
                                         <td>{{ $item->name }}</td>
                                         <td>{{ $item->desc }}</td>
-                                        <td>{{ $item->category }}</td>
-                                        <td>
-                                            @if ($item->status == 'active')
-                                            <span class="text-success">{{ ucfirst($item->status) }}</span>
-                                            @else
-                                            <span class="text-danger">{{ ucfirst($item->status) }}</span>
-                                            @endif
-                                        </td>
-                                        <td>{{ formatDate($item->created_at) }}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-center">
-                                                <button type="button"
-                                                    class="btn btn-outline-success dropdown-toggle dropdown-toggle-split"
-                                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                    data-display="static">
-                                                    <span class="sr-only"><i class="ri-settings-3-line"></i></span>
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" data-bs-toggle="modal"
-                                                        data-bs-target="#edit{{ $item->id }}">Edit</a>
-                                                    <a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#delete{{ $item->id }}">Delete</a>
+                                        @php
+                                        $categoryData = json_decode($item->category, true);
+                                        // Wrap each category with <span> tags and concatenate them with ','
+                                            // $formattedCategories = implode(', ', array_map(function ($categoryData) {
+                                            // return "<span>{$categoryData}</span>";
+                                            // }, $categories));
+                                            $formattedCategories = implode(' , ', $categoryData);
+                                            // Add the formatted string to the array
+                                            // $subCategoriesFormatted[] = $formattedCategories;
+                                            @endphp
+                                            <td>
+                                                <span class="badge bg-primary">
+                                                    {{
+                                                    // $formattedCategories = implode(' , ', $categoryData);
+                                                    // Add the formatted string to the array
+                                                    $subCategoriesFormatted[] = $formattedCategories
+                                                    }}
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if ($item->status == 'active')
+                                                <span class="text-success">{{ ucfirst($item->status) }}</span>
+                                                @else
+                                                <span class="text-danger">{{ ucfirst($item->status) }}</span>
+                                                @endif
+                                            </td>
+                                            <td>{{ formatDate($item->created_at) }}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <button type="button"
+                                                        class="btn btn-outline-success dropdown-toggle dropdown-toggle-split"
+                                                        data-bs-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false" data-display="static">
+                                                        <span class="sr-only"><i class="ri-settings-3-line"></i></span>
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                                                        <a class="dropdown-item" data-bs-toggle="modal"
+                                                            data-bs-target="#edit{{ $item->id }}">Edit</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#delete{{ $item->id }}">Delete</a>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                                            </td>
                                     </tr>
                                     {{-- edit --}}
                                     <div class="modal fade" id="edit{{ $item->id }}" tabindex="-1"
@@ -145,7 +163,7 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="{{ route('categoryUpdate') }}" method="POST"
+                                                <form action="{{ route('subCategoryUpdate') }}" method="POST"
                                                     class="cr-content-form needs-validation"
                                                     onsubmit="showConfirmation(this, event, 'update');"
                                                     enctype="multipart/form-data" novalidate>
@@ -161,6 +179,7 @@
                                                                         value="{{ $item->name }}" required>
                                                                 </div>
                                                             </div>
+
                                                             <div class="col-12">
                                                                 <div class="form-group">
                                                                     <label>Description</label>
@@ -168,6 +187,31 @@
                                                                         required>{{ $item->desc }}</textarea>
                                                                 </div>
                                                             </div>
+
+                                                            <div class="col-12 mb-3">
+                                                                <div class="form-group">
+                                                                    <label>Category
+                                                                        <small>(You can select multiple
+                                                                            options)</small>
+                                                                    </label>
+                                                                    <br>
+                                                                    <ul class="form-check g-3 align-center">
+                                                                        @foreach ($categories as $category)
+                                                                        <li>
+                                                                            <input type="checkbox"
+                                                                                class="form-check-input"
+                                                                                name="category[]"
+                                                                                id="category-{{ $category->name }}"
+                                                                                value="{{ $category->name }}">
+                                                                            <label class="form-check-label me-2"
+                                                                                for="category-{{ $category->name }}">{{
+                                                                                $category->name }}</label>
+                                                                        </li>
+                                                                        @endforeach
+                                                                        </>
+                                                                </div>
+                                                            </div>
+
                                                             <div class="col-12">
                                                                 <div class="form-group">
                                                                     <label>Update Status</label>
@@ -202,14 +246,14 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
-                                                <form action="{{ route('categoryDelete') }}" method="POST"
+                                                <form action="{{ route('subCategoryDelete') }}" method="POST"
                                                     class="cr-content-form needs-validation"
                                                     onsubmit="showConfirmation(this, event, 'delete');"
                                                     enctype="multipart/form-data" novalidate>
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{ $item->id }}">
                                                     <div class="modal-body">
-                                                        <h4>Are you sure you want to delete this category?</h4>
+                                                        <h6>Are you sure you want to delete this sub-category?</h6>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary"

@@ -53,6 +53,15 @@ Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
         Route::group(['prefix' => 'seller'], function () {
             Route::get('dashboard', [SellerController::class, 'dashboard'])->name('sellerDashboard');
             Route::get('profile', [SellerController::class, 'profile'])->name('sellerProfile');
+            Route::post('save-profile', [SellerController::class, 'saveProfile'])->name('sellerSaveProfile');
+            // sub-category
+            Route::group(['prefix' => 'product'], function () {
+                Route::get('/', [SellerController::class, 'productIndex'])->name('productIndex');
+                Route::get('create', [SellerController::class, 'productCreate'])->name('productCreate');
+                Route::post('store', [SellerController::class, 'productStore'])->name('productStore');
+                Route::post('update', [SellerController::class, 'productUpdate'])->name('productUpdate');
+                Route::post('delete', [SellerController::class, 'productDelete'])->name('productDelete');
+            });
         });
     });
 });

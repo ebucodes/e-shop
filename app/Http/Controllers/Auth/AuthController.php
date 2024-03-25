@@ -84,8 +84,7 @@ class AuthController extends Controller
             }
             //  if user is seller
             if (auth()->user()->role == 'seller') {
-                // $sellerProfile = SellerProfile::where('userID', auth()->user()->id)->first();
-                $sellerProfile = SellerProfile::find(auth()->user()->id);
+                $sellerProfile = SellerProfile::where('userID', auth()->user()->id)->first();
                 if ($sellerProfile == null) {
                     return redirect()->route('sellerProfile')->with('info', "You need to complete your seller profile to activate your eShop account");
                 }

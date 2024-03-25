@@ -24,7 +24,7 @@ return new class extends Migration
             $table->text('companyAddress');
             $table->string('companyPhone');
             $table->string('companyLocation');
-            $table->text('companyLogo');
+            $table->text('companyLogo')->nullable();
             $table->string('bankName');
             $table->string('accountName');
             $table->string('accountNumber');

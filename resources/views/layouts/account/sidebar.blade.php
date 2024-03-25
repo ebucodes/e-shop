@@ -57,7 +57,7 @@
                     </a>
                 </li>
                 <li class="cr-sb-item">
-                    <a href="{{ route('categoryIndex') }}" class="cr-page-link">
+                    <a href="{{ route('productIndex') }}" class="cr-page-link">
                         <i class="ri-bar-chart-grouped-line"></i>
                         <span class="condense">
                             <span class="hover-title">Products</span>
@@ -69,7 +69,7 @@
                     <a href="{{ route('subCategoryIndex') }}" class="cr-page-link">
                         <i class="ri-bar-chart-grouped-line"></i>
                         <span class="condense">
-                            <span class="hover-title">Sub Category
+                            <span class="hover-title">Order History
                             </span>
                         </span>
                     </a>

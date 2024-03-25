@@ -7,16 +7,7 @@
                         <span class="inner-ring"></span>
                     </span>
                 </a>
-                <div class="header-search-box">
-                    <div class="header-search-drop">
-                        <a href="javascript:void(0)" class="open-search"><i class="ri-search-line"></i></a>
-                        <form class="cr-search">
-                            <input class="search-input" type="text" placeholder="Search...">
-                            <a href="javascript:void(0)" class="search-btn"><i class="ri-search-line"></i>
-                            </a>
-                        </form>
-                    </div>
-                </div>
+
             </div>
             <div class="right-header">
                 <div class="cr-right-tool cr-user-drop">

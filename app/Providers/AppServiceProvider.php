@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,8 +18,16 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void
+    // public function boot(): void
+    // {
+    //     //
+    // }
+    public function boot()
     {
-        //
+        // Share categories data with all views
+        view()->composer('*', function ($view) {
+            $categories = Category::where('status', 'active')->get();
+            $view->with('categories', $categories);
+        });
     }
 }

@@ -12,7 +12,7 @@
                 </li>
                 <li class="dropdown drop-list">
                     <span class="menu-toggle"></span>
-                    <a href="javascript:void(0)" class="dropdown-list">Category</a>
+                    <a href="javascript:void(0)" class="dropdown-list">Categorys</a>
                     <ul class="sub-menu">
                         <li><a href="shop-left-sidebar.html">Shop Left sidebar</a></li>
                         <li><a href="shop-right-sidebar.html">Shop Right sidebar</a></li>
@@ -54,15 +54,6 @@
                         <li><a href="blog-detail-left-sidebar.html">Detail Left Sidebar</a></li>
                         <li><a href="blog-detail-right-sidebar.html">Detail Right Sidebar</a></li>
                         <li><a href="blog-detail-full-width.html">Detail Full Width</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown drop-list">
-                    <span class="menu-toggle"></span>
-                    <a href="javascript:void(0)">Element</a>
-                    <ul class="sub-menu">
-                        <li><a href="elements-products.html">Products</a></li>
-                        <li><a href="elements-typography.html">Typography</a></li>
-                        <li><a href="elements-buttons.html">Buttons</a></li>
                     </ul>
                 </li>
             </ul>

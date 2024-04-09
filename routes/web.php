@@ -12,7 +12,9 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [WebsiteController::class, 'home'])->name('homePage');
+Route::get('/', [WebsiteController::class, 'homePage'])->name('homePage');
+Route::get('products/{category}', [WebsiteController::class, 'productsPage'])->name('productsPage');
+
 Route::get('my-logs', [WebsiteController::class, 'myLogs'])->name('myLogs');
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
 Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
@@ -60,6 +62,7 @@ Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
                 Route::get('create', [SellerController::class, 'productCreate'])->name('productCreate');
                 Route::post('store', [SellerController::class, 'productStore'])->name('productStore');
                 Route::post('update', [SellerController::class, 'productUpdate'])->name('productUpdate');
+                Route::post('update-image', [SellerController::class, 'productUpdateImage'])->name('productUpdateImage');
                 Route::post('delete', [SellerController::class, 'productDelete'])->name('productDelete');
             });
         });

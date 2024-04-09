@@ -270,7 +270,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="index.html">
+                                <a class="nav-link" href="{{ route('homePage') }}">
                                     Home
                                 </a>
                             </li>
@@ -279,22 +279,16 @@
                                     Category
                                 </a>
                                 <ul class="dropdown-menu">
+                                    @foreach ($categories as $category)
                                     <li>
-                                        <a class="dropdown-item" href="shop-left-sidebar.html">Shop Left
-                                            sidebar</a>
+                                        <a class="dropdown-item"
+                                            href="{{ route('productsPage',['category'=>$category->id] ) }}">{{
+                                            $category->name }}</a>
                                     </li>
-                                    <li>
-                                        <a class="dropdown-item" href="shop-right-sidebar.html">Shop
-                                            Right
-                                            sidebar</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="shop-full-width.html">Full
-                                            Width</a>
-                                    </li>
+                                    @endforeach
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
+                            {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="javascript:void(0)">
                                     Products
                                 </a>
@@ -316,7 +310,7 @@
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="javascript:void(0)">
                                     Pages
@@ -385,22 +379,6 @@
                                         <a class="dropdown-item" href="blog-detail-full-width.html">Detail
                                             Full
                                             Width</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="javascript:void(0)">
-                                    Elements
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" href="elements-products.html">Products</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="elements-typography.html">Typography</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="elements-buttons.html">Buttons</a>
                                     </li>
                                 </ul>
                             </li>

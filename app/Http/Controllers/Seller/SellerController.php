@@ -143,22 +143,121 @@ class SellerController extends Controller
         $validated = $request->validate([
             'name' => 'bail|required',
             'desc' => 'bail|required',
+            'category' => 'bail|required',
+            'main_picture' => 'bail|required',
+            // 'others_pictures' => 'bail|required',
+            'price' => 'bail|required|numeric|min:0',
+            'quantity' => 'bail|required|numeric|min:0',
+
         ]);
 
         if ($validated) {
-            $create = new Category();
+            $create = new Product();
+            $create->user_id = auth()->user()->email;
             $create->name = $request->name;
             $create->desc = $request->desc;
-            $create->status = 'active';
+            $create->category = $request->category;
+            $create->price = $request->price;
+            $create->quantity = $request->quantity;
+            $create->purchased = '0';
+            $create->status = 'in_stock';
+            $main = $request->main_picture;
+            $other = $request->other_pictures;
+            if ($main) {
+                $main_name = $request->name . '-' . time() . random_int(1, 1000) . '.' . $main->getClientOriginalExtension();
+                $main->move('products/', $main_name);
+                $create->main_picture = $main_name;
+            }
+
+            // Store other pictures
+            $otherPictures = [];
+            if ($request->hasFile('other_pictures')) {
+                foreach ($request->file('other_pictures') as $file) {
+                    $filename = $request->name . '-' . time() . '-' . rand(1, 1000) . '.' . $file->getClientOriginalExtension();
+                    $file->move('products/', $filename);
+                    $otherPictures[] = $filename;
+                    $create->other_pictures = $filename;
+                }
+            }
+
             $create->save();
+
             // log activity
-            $logMessage = auth()->user()->email . " created a new category named: {$request->name}";
-            logAction(auth()->user()->email, 'Created a Category', $logMessage, $request->ip(), $request->userAgent());
+            $logMessage = auth()->user()->email . " created a new product named: {$request->name}";
+            logAction(auth()->user()->email, 'Created a Product', $logMessage, $request->ip(), $request->userAgent());
             //
-            return redirect()->back()->with('success', "Created successfully");
+            return redirect()->route('productIndex')->with('success', "Created successfully");
         } else {
             // If there are validation errors, you can return to the form with the errors
             return back()->withErrors($validated);
         }
     }
+
+    //
+    public function productUpdate(Request $request)
+    {
+        $id = $request->id;
+        $validated = $request->validate([
+            'name' => 'bail|required',
+            'desc' => 'bail|required',
+            'category' => 'bail|required',
+            'price' => 'bail|required|numeric|min:0',
+            'quantity' => 'bail|required|numeric|min:0',
+        ]);
+
+        if ($validated) {
+            $product = Product::where('id', $id)->first();
+
+            $product->update(['name' => $request->name, 'desc' => $request->desc, 'category' => $request->category, 'price' => $request->price, 'quantity' => $request->quantity]);
+
+            // log activity
+            $logMessage = auth()->user()->email . " updated a  product";
+            logAction(auth()->user()->email, 'Updated a Product', $logMessage, $request->ip(), $request->userAgent());
+            //
+            return redirect()->route('productIndex')->with('success', "Updated successfully");
+        } else {
+            // If there are validation errors, you can return to the form with the errors
+            return back()->withErrors($validated);
+        }
+    }
+
+
+    // public function productUpdateImage(Request $request)
+    // {
+    //     $id = $request->id;
+    //     $validated = $request->validate([
+    //         'main_picture' => 'bail|required',
+    //     ]);
+
+    //     if ($validated) {
+    //         $product = Product::where('id', $id)->first();
+    //         if ($main) {
+    //             $main_name = $request->name . '-' . time() . random_int(1, 1000) . '.' . $main->getClientOriginalExtension();
+    //             $main->move('products/', $main_name);
+    //             $create->main_picture = $main_name;
+    //         }
+
+    //         // Store other pictures
+    //         $otherPictures = [];
+    //         if ($request->hasFile('other_pictures')) {
+    //             foreach ($request->file('other_pictures') as $file) {
+    //                 $filename = $request->name . '-' . time() . '-' . rand(1, 1000) . '.' . $file->getClientOriginalExtension();
+    //                 $file->move('products/', $filename);
+    //                 $otherPictures[] = $filename;
+    //                 $create->other_pictures = $filename;
+    //             }
+    //         }
+
+    //         $create->save();
+
+    //         // log activity
+    //         $logMessage = auth()->user()->email . " created a new product named: {$request->name}";
+    //         logAction(auth()->user()->email, 'Created a Product', $logMessage, $request->ip(), $request->userAgent());
+    //         //
+    //         return redirect()->route('productIndex')->with('success', "Created successfully");
+    //     } else {
+    //         // If there are validation errors, you can return to the form with the errors
+    //         return back()->withErrors($validated);
+    //     }
+    // }
 }

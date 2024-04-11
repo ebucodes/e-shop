@@ -14,7 +14,6 @@ use App\Models\Product;
 
 class SellerController extends Controller
 {
-
     //
     public function dashboard()
     {

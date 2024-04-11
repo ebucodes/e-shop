@@ -69,56 +69,6 @@
                             <button type="button" class="cr-button">Filter</button>
                         </div>
                     </div>
-                    <div class="cr-shop-color">
-                        <h4 class="cr-shop-sub-title">Colors</h4>
-                        <div class="cr-checkbox">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="blue">
-                                <label for="blue">Blue</label>
-                                <span class="blue"></span>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="yellow">
-                                <label for="yellow">Yellow</label>
-                                <span class="yellow"></span>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="red">
-                                <label for="red">Red</label>
-                                <span class="red"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cr-shop-weight">
-                        <h4 class="cr-shop-sub-title">Weight</h4>
-                        <div class="cr-checkbox">
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="2kg">
-                                <label for="2kg">2kg Pack</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="20kg">
-                                <label for="20kg">20kg Pack</label>
-                            </div>
-                            <div class="checkbox-group">
-                                <input type="checkbox" id="30kg">
-                                <label for="30kg">30kg pack</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="cr-shop-tags">
-                        <h4 class="cr-shop-sub-title">Tages</h4>
-                        <div class="cr-shop-tags-inner">
-                            <ul class="cr-tags">
-                                <li><a href="javascript:void(0)">Vegetables</a></li>
-                                <li><a href="javascript:void(0)">juice</a></li>
-                                <li><a href="javascript:void(0)">Food</a></li>
-                                <li><a href="javascript:void(0)">Dry Fruits</a></li>
-                                <li><a href="javascript:void(0)">Vegetables</a></li>
-                                <li><a href="javascript:void(0)">juice</a></li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
             <div class="col-lg-9 col-12 md-30" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="600">
@@ -152,20 +102,12 @@
                 </div>
                 <div class="row col-100 mb-minus-24">
                     @foreach ($products as $product)
-                    <div class="col-xxl-3 col-xl-4 col-6 cr-product-box mb-24">
+                    <div class="col-xxl-4 col-xl-4 col-6 cr-product-box mb-24">
                         <div class="cr-product-card">
                             <div class="cr-product-image">
                                 <div class="cr-image-inner zoom-image-hover">
-                                    <img src="assets/img/product/1.jpg" alt="product-1">
-                                </div>
-                                <div class="cr-side-view">
-                                    <a href="javascript:void(0)" class="wishlist">
-                                        <i class="ri-heart-line"></i>
-                                    </a>
-                                    <a class="model-oraganic-product" data-bs-toggle="modal" href="#quickview"
-                                        role="button">
-                                        <i class="ri-eye-line"></i>
-                                    </a>
+                                    <img src="{{ asset('products/'.$product->main_picture) }}" alt="product-1"
+                                        width="100" height="100">
                                 </div>
                                 <a class="cr-shopping-bag" href="javascript:void(0)">
                                     <i class="ri-shopping-bag-line"></i>
@@ -173,27 +115,40 @@
                             </div>
                             <div class="cr-product-details">
                                 <div class="cr-brand">
-                                    <a href="shop-left-sidebar.html">Vegetables</a>
-                                    <div class="cr-star">
+                                    <h6 href="shop-left-sidebar.html">{{ $product->name }}</h6>
+                                    {{-- <div class="cr-star">
                                         <i class="ri-star-fill"></i>
                                         <i class="ri-star-fill"></i>
                                         <i class="ri-star-fill"></i>
                                         <i class="ri-star-fill"></i>
                                         <i class="ri-star-line"></i>
                                         <p>(4.5)</p>
-                                    </div>
+                                    </div> --}}
                                 </div>
-                                <a href="product-left-sidebar.html" class="title">Fresh organic villa farm lomon
-                                    500gm pack</a>
-                                <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                                <p href="product-left-sidebar.html" class="title">{{ $product->desc }}</p>
+                                {{-- <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                    eiusmod
                                     tempor incididunt ut labore lacus vel facilisis.</p>
                                 <ul class="list">
                                     <li><label>Brand :</label>ESTA BETTERU CO</li>
                                     <li><label>Diet Type :</label>Vegetarian</li>
                                     <li><label>Speciality :</label>Gluten Free, Sugar Free</li>
-                                </ul>
-                                <p class="cr-price"><span class="new-price">$120.25</span> <span
-                                        class="old-price">$123.25</span></p>
+                                </ul> --}}
+                                <p class="cr-price"><span class="new-price">${{ $product->price }}</span></p>
+                                @if (auth()->check() && auth()->user()->role == 'buyer')
+                                <form action="{{ route('addToCart') }}" method="post">
+                                    @csrf
+                                    <input type="hidden" name="product" value="{{ $product->id }}">
+                                    <input type="hidden" name="user" value="{{ auth()->user()->email }}">
+                                    <div class="cr-add-card">
+                                        <div class="cr-add-button">
+                                            <button type="submit" class="cr-button">Add to cart</button>
+                                        </div>
+                                    </div>
+                                </form>
+                                @else
+                                <p>Please log in to add items to your cart.</p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -201,17 +156,7 @@
                 </div>
                 <nav aria-label="..." class="cr-pagination">
                     <ul class="pagination">
-                        <li class="page-item disabled">
-                            <span class="page-link">Previous</span>
-                        </li>
-                        <li class="page-item active" aria-current="page">
-                            <span class="page-link">1</span>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
+                        <li>{{ $products->links() }}</li>
                     </ul>
                 </nav>
             </div>

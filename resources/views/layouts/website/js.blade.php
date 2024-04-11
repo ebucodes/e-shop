@@ -123,3 +123,28 @@
         }
     }
 </script>
+
+<script>
+    // JavaScript to handle quantity change events
+    const quantityInputs = document.querySelectorAll('.quantity');
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            const quantity = parseInt(this.value);
+            const productId = this.dataset.productId;
+            updateTotal(productId, quantity);
+        });
+    });
+
+    function updateTotal(productId, quantity) {
+        // Perform AJAX request to update total
+        fetch(`/update-total?product_id=${productId}&quantity=${quantity}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update total in the corresponding table cell
+                const totalCell = document.querySelector(`.quantity[data-product-id="${productId}"]`).parentNode.nextElementSibling;
+                totalCell.textContent = `$${data.total.toFixed(2)}`;
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>

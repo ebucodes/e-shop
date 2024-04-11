@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Buyer\BuyerController;
 use App\Http\Controllers\Seller\SellerController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Middleware\PreventBackHistory;
@@ -64,6 +65,23 @@ Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
                 Route::post('update', [SellerController::class, 'productUpdate'])->name('productUpdate');
                 Route::post('update-image', [SellerController::class, 'productUpdateImage'])->name('productUpdateImage');
                 Route::post('delete', [SellerController::class, 'productDelete'])->name('productDelete');
+            });
+        });
+    });
+
+    // buyer
+    Route::group(['middleware' => ['userRole:buyer']], function () {
+        Route::group(['prefix' => 'buyer'], function () {
+            Route::get('dashboard', [BuyerController::class, 'dashboard'])->name('sellerDashboard');
+            // cart
+            Route::group(['prefix' => 'cart'], function () {
+                Route::get('all-items', [BuyerController::class, 'myCart'])->name('myCart');
+                Route::post('add', [BuyerController::class, 'addToCart'])->name('addToCart');
+                Route::post('update', [BuyerController::class, 'updateCart'])->name('updateCart');
+            });
+            // cart
+            Route::group(['prefix' => 'checkout'], function () {
+                Route::get('', [BuyerController::class, 'checkOut'])->name('checkOut');
             });
         });
     });

@@ -90,6 +90,14 @@ class AuthController extends Controller
                 }
                 return redirect()->route('sellerDashboard')->with('success', "Welcome to the eShop, {$user->firstName}");
             }
+            //  if user is buyer
+            if (auth()->user()->role == 'buyer') {
+                // $sellerProfile = SellerProfile::where('userID', auth()->user()->id)->first();
+                // if ($sellerProfile == null) {
+                //     return redirect()->route('sellerProfile')->with('info', "You need to complete your seller profile to activate your eShop account");
+                // }
+                return redirect()->route('homePage')->with('success', "Welcome to the eShop, {$user->firstName}");
+            }
         } else {
             // Invalid credentials
             return redirect()->route('login')->with('error', 'Invalid credentials.');

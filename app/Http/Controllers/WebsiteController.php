@@ -12,7 +12,7 @@ class WebsiteController extends Controller
     //
     public function homePage()
     {
-        return view('homePage', compact('categories'));
+        return view('homePage');
     }
 
     public function myLogs()
@@ -26,7 +26,7 @@ class WebsiteController extends Controller
     {
         $categoryName = Category::where('id', $category)->first();
         $pageTitle = $categoryName->name;
-        $products = Product::where('category', $category)->get();
+        $products = Product::where('category', $category)->paginate(6);
         $countProducts = $products->count();
         return view('pages.products', compact('pageTitle', 'products', 'countProducts'));
     }

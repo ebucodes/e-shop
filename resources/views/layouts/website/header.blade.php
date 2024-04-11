@@ -22,37 +22,56 @@
                     </form>
                     <div class="cr-right-bar">
                         <ul class="navbar-nav">
+                            @if (auth()->check())
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle cr-right-bar-item" href="javascript:void(0)">
                                     <i class="ri-user-3-line"></i>
-                                    <span>Account</span>
+                                    <span>{{ auth()->user()->firstName .' '. auth()->user()->lastName }}</span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        @if (auth()->user()->role == 'admin')
+                                        <a class="dropdown-item" href="{{ route('adminDashboard') }}">My Dashboard</a>
+                                        @elseif (auth()->user()->role == 'buyer')
+                                        <a class="dropdown-item" href="{{ route('sellerDashboard') }}">My Dashboard</a>
+                                        @elseif (auth()->user()->role == 'seller')
+                                        <a class="dropdown-item" href="{{ route('sellerDashboard') }}">My Dashboard</a>
+                                        @endif
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logOut') }}">Sign Out</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @else
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle cr-right-bar-item" href="javascript:void(0)">
+                                    <i class="ri-user-3-line"></i>
+                                    <span>My Account</span>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a class="dropdown-item" href="{{ route('register') }}">Register</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="checkout.html">Checkout</a>
-                                    </li>
-                                    <li>
                                         <a class="dropdown-item" href="{{ route('login') }}">Login</a>
                                     </li>
                                 </ul>
                             </li>
+                            @endif
                         </ul>
-                        <a href="wishlist.html" class="cr-right-bar-item">
-                            <i class="ri-heart-3-line"></i>
-                            <span>Wishlist</span>
-                        </a>
-                        <a href="javascript:void(0)" class="cr-right-bar-item Shopping-toggle">
+
+                        <a href="{{ route('myCart') }}" class="cr-right-bar-item">
                             <i class="ri-shopping-cart-line"></i>
-                            <span>Cart</span>
+                            <span>My Cart</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
     <div class="cr-fix" id="cr-main-menu-desk">
         <div class="container">
             <div class="cr-menu-list">

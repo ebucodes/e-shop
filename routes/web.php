@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Buyer\BuyerController;
 use App\Http\Controllers\Seller\SellerController;
+use App\Http\Controllers\SystemController;
 use App\Http\Controllers\WebsiteController;
 use App\Http\Middleware\PreventBackHistory;
 use App\Http\Middleware\UserRole;
@@ -12,7 +13,10 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
+//
+Route::get('cache', [SystemController::class, 'clearCache'])->name('clearCache');
+Route::get('db', [SystemController::class, 'refreshDatabase'])->name('refreshDatabase');
+//
 Route::get('', [WebsiteController::class, 'homePage'])->name('homePage');
 Route::get('products/{category}', [WebsiteController::class, 'productsPage'])->name('productsPage');
 Route::get('all-products', [WebsiteController::class, 'allProducts'])->name('allProducts');

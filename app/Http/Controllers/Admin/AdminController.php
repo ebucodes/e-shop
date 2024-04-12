@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\SubCategory;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -14,8 +17,12 @@ class AdminController extends Controller
     public function dashboard()
     {
         $pageTitle = 'Admin Dashboard';
-        $logs = Activity::orderBy('created_at', 'DESC')->get();
-        return view('admin.dashboard', compact('pageTitle', 'logs'));
+        $customers = User::where('role', 'buyer')->count();
+        $vendors = User::where('role', 'seller')->count();
+        $orders = Order::where('status', 'paid')->count();
+        $totalPrice = Order::where('status', 'paid')
+            ->sum(DB::raw('price * quantity'));
+        return view('admin.dashboard', compact('pageTitle', 'customers', 'vendors', 'orders', 'totalPrice'));
     }
 
     //

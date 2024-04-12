@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class SystemController extends Controller
@@ -46,5 +47,23 @@ class SystemController extends Controller
         fclose($csvFile);
 
         return redirect()->route('login');
+    }
+
+    public function clearCache()
+    {
+        Artisan::call('optimize:clear');
+        Artisan::call('view:clear');
+        Artisan::call('config:cache');
+        return redirect()->route('homePage')->with('success', "Cache cleared successfully");
+    }
+
+    public function refreshDatabase()
+    {
+
+        Artisan::call('migrate:fresh');
+        Artisan::call('db:seed');
+        Artisan::call('optimize:clear');
+        Artisan::call('config:cache');
+        return redirect()->route('homePage')->with('success', "Refresh Database was successfully");
     }
 }

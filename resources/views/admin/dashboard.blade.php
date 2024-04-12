@@ -8,17 +8,11 @@
         <!-- Page title & breadcrumb -->
         <div class="cr-page-title">
             <div class="cr-breadcrumb">
-                <h5>eCommerce</h5>
-                <ul>
-                    <li><a href="index.html">Carrot</a></li>
-                    <li>eCommerce</li>
-                </ul>
+                <h5>{{ config('app.name') }}</h5>
             </div>
             <div class="cr-tools">
-                <div id="pagedate">
-                    <div class="cr-date-range" title="Date">
-                        <span></span>
-                    </div>
+                <div class="cr-date-range" title="Date">
+                    <span>{{ formatDate(now()) }}</span>
                 </div>
             </div>
         </div>
@@ -32,14 +26,22 @@
                                     <span class="icon icon-1"><i class="ri-shield-user-line"></i></span>
                                     <div class="growth-numbers">
                                         <h4>Customers</h4>
-                                        <h5>857k</h5>
+                                        <h5>{{ $customers }}</h5>
                                     </div>
                                 </div>
-                                <p class="card-groth up">
-                                    <i class="ri-arrow-up-line"></i>
-                                    32%
-                                    <span>Last Month</span>
-                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="cr-card">
+                            <div class="cr-card-content label-card">
+                                <div class="title">
+                                    <span class="icon icon-1"><i class="ri-shield-user-line"></i></span>
+                                    <div class="growth-numbers">
+                                        <h4>Vendors</h4>
+                                        <h5>{{ $vendors }}</h5>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -50,14 +52,9 @@
                                     <span class="icon icon-2"><i class="ri-shopping-bag-3-line"></i></span>
                                     <div class="growth-numbers">
                                         <h4>Order</h4>
-                                        <h5>08.65k</h5>
+                                        <h5>{{ $orders }}</h5>
                                     </div>
                                 </div>
-                                <p class="card-groth down">
-                                    <i class="ri-arrow-down-line"></i>
-                                    1.7%
-                                    <span>Last Month</span>
-                                </p>
                             </div>
                         </div>
                     </div>
@@ -68,39 +65,16 @@
                                     <span class="icon icon-3"><i class="ri-money-dollar-circle-line"></i></span>
                                     <div class="growth-numbers">
                                         <h4>Revenue</h4>
-                                        <h5>$85746</h5>
+                                        <h5>${{ number_format($totalPrice,2) }}</h5>
                                     </div>
                                 </div>
-                                <p class="card-groth down">
-                                    <i class="ri-arrow-down-line"></i>
-                                    3.8%
-                                    <span>Last Month</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="cr-card">
-                            <div class="cr-card-content label-card">
-                                <div class="title">
-                                    <span class="icon icon-4"><i class="ri-exchange-dollar-line"></i></span>
-                                    <div class="growth-numbers">
-                                        <h4>Expenses</h4>
-                                        <h5>$75462</h5>
-                                    </div>
-                                </div>
-                                <p class="card-groth up">
-                                    <i class="ri-arrow-up-line"></i>
-                                    8%
-                                    <span>Last Month</span>
-                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
+        {{-- <div class="row">
             <div class="col-xxl-8 col-xl-12">
                 <div class="cr-card revenue-overview">
                     <div class="cr-card-header header-575">
@@ -583,7 +557,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </div>
 @endsection

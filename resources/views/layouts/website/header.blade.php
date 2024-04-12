@@ -8,7 +8,7 @@
                         <img src="{{ asset('website/assets/img/logo/logo.png') }}" alt="logo" class="logo">
                         <img src="{{ asset('website/assets/img/logo/dark-logo.png') }}" alt="logo" class="dark-logo">
                     </a>
-                    <form class="cr-search">
+                    {{-- <form class="cr-search">
                         <input class="search-input" type="text" placeholder="Search For items...">
                         <select class="form-select" aria-label="Default select example">
                             <option selected>All Categories</option>
@@ -19,7 +19,7 @@
                         <a href="javascript:void(0)" class="search-btn">
                             <i class="ri-search-line"></i>
                         </a>
-                    </form>
+                    </form> --}}
                     <div class="cr-right-bar">
                         <ul class="navbar-nav">
                             @if (auth()->check())
@@ -32,10 +32,10 @@
                                     <li>
                                         @if (auth()->user()->role == 'admin')
                                         <a class="dropdown-item" href="{{ route('adminDashboard') }}">My Dashboard</a>
-                                        @elseif (auth()->user()->role == 'buyer')
-                                        <a class="dropdown-item" href="{{ route('sellerDashboard') }}">My Dashboard</a>
                                         @elseif (auth()->user()->role == 'seller')
                                         <a class="dropdown-item" href="{{ route('sellerDashboard') }}">My Dashboard</a>
+                                        @elseif (auth()->user()->role == 'buyer')
+                                        <a class="dropdown-item" href="{{ route('myOrder') }}">Order History</a>
                                         @endif
                                     </li>
                                     <li>
@@ -336,38 +336,20 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" href="about.html">About Us</a>
+                                        <a class="dropdown-item" href="{{ route('aboutUs') }}">About Us</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="contact-us.html">Contact Us</a>
+                                        <a class="dropdown-item" href="{{ route('contactUs') }}">Contact Us</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="cart.html">Cart</a>
+                                        <a class="dropdown-item" href="{{ route('faq') }}">Faq</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="checkout.html">Checkout</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="track-order.html">Track Order</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="wishlist.html">Wishlist</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="faq.html">Faq</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="login.html">Login</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="register.html">Register</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="policy.html">Policy</a>
+                                        <a class="dropdown-item" href="{{ route('policy') }}">Policy</a>
                                     </li>
                                 </ul>
                             </li>
-                            <li class="nav-item dropdown">
+                            {{-- <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="javascript:void(0)">
                                     Blog
                                 </a>
@@ -400,7 +382,7 @@
                                             Width</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </nav>

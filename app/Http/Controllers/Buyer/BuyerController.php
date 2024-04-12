@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Buyer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Activity;
+use App\Models\BuyerProfile;
 use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class BuyerController extends Controller
@@ -24,7 +27,6 @@ class BuyerController extends Controller
         $collection = Cart::where('userID', auth()->user()->email)->where('status', 'pending')->orderBy('created_at', 'DESC')->get();
         return view('buyer.cart', compact('pageTitle', 'collection'));
     }
-
 
     //
     public function addToCart(Request $request)
@@ -51,25 +53,6 @@ class BuyerController extends Controller
     }
 
     //
-    // public function updateCart(Request $request)
-    // {
-    //     $cartIDs = $request->cart;
-    //     $quantities = $request->quantity;
-    //     // Check if the item already exists in the cart for this user
-    //     // $carts = Cart::where('id', $cartID)->get();
-
-    //     foreach ($cartIDs as $key => $cartID) {
-    //         $quantity = $quantities[$key];
-    //         $cart = Cart::find($cartID);
-    //         $cart->update(['quantity' => $quantity]);
-    //     }
-
-    //     // foreach ($carts as  $cart) {
-    //     //     $cart->update(['quantity' => $quantity]);
-    //     // }
-    //     // $cart = Cart::find($cartID);
-    //     return redirect()->route('checkOut')->with('success', 'Items updated to cart successfully');
-    // }
     public function updateCart(Request $request)
     {
         $cartIDs = $request->cart;
@@ -103,6 +86,72 @@ class BuyerController extends Controller
     {
         $pageTitle = 'Check Out';
         $collection = Cart::where('userID', auth()->user()->email)->where('status', 'pending')->orderBy('created_at', 'DESC')->get();
-        return view('buyer.checkout', compact('pageTitle', 'collection'));
+        $details = BuyerProfile::where('user', auth()->user()->email)->first();
+        return view('buyer.checkout', compact('pageTitle', 'collection', 'details'));
+    }
+
+    //
+    public function storeOrder(Request $request)
+    {
+        $buyer = auth()->user();
+        $carts = Cart::with('product')->where('userID', $buyer->email)->get();
+        $payment = $request->input('payment');
+        // $sellers = $carts->product->user_id;
+        // Generate a random 7-digit number
+        $orderNumber = 'Order' . str_pad(mt_rand(1, 9999999), 7, '0', STR_PAD_LEFT);
+        $sellers = [];
+        foreach ($carts as $cart) {
+            // Assuming each cart has only one product
+            $product = $cart->product;
+            $seller = $product->user_id;
+            $sellers[] = $seller;
+            $price = ($cart->product->quantity) * ($cart->product->price);
+            //
+            $order = new Order();
+            $order->orderID = $orderNumber;
+            $order->buyer = $buyer->email;
+            $order->seller = $seller;
+            $order->product = $cart->product->id;
+            $order->quantity = $cart->quantity;
+            $order->price =  $cart->product->price;
+            $order->payment = $payment;
+            if ($payment == 'card') {
+                $order->status = 'paid';
+            }
+            $create = $order->save();
+
+            //
+            if ($create) {
+                //
+                $products = Product::where('id', $cart->product->id)->first();
+
+                $newQuantity = $products->quantity - $cart->quantity;
+                $newPurchased = $products->purchased + $cart->quantity;
+                $products->update(['quantity' => $newQuantity, 'purchased' => $newPurchased]);
+                //
+                $cartItems = Cart::where('userID', auth()->user()->email)->where('status', 'pending')->get();
+                foreach ($cartItems as $cartItem) {
+                    $cartItem->update(['status' => 'paid']);
+                }
+                // if ($request->payment == 'card') {
+                //     $orders = Order::where('userID', auth()->user()->email)->where('status', 'pending')->get();
+                //     foreach ($cartItems as $cartItem) {
+                //         // $cart = Cart::find($cartID);
+                //         $cartItem->update(['status' => 'paid']);
+                //     }
+                // }
+            }
+        }
+
+        return redirect()->route('homePage')->with('success', 'Your order has been placed successfully');
+        // dd($sellers);
+    }
+
+    //
+    public function myOrder()
+    {
+        $pageTitle = 'Order History';
+        $collection = Order::where('buyer', auth()->user()->email)->orderBy('created_at', 'DESC')->get();
+        return view('buyer.orders', compact('pageTitle', 'collection'));
     }
 }

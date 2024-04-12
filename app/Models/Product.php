@@ -16,4 +16,13 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class, 'category', 'id');
     }
+
+    public function setStatusAttribute($value)
+    {
+        if ($this->quantity == 0) {
+            $this->attributes['status'] = 'out_of_stock';
+        } else {
+            $this->attributes['status'] = $value;
+        }
+    }
 }

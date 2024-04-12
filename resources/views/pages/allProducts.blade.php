@@ -25,21 +25,24 @@
             <div class="col-lg-12">
                 <div class="mb-30" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="400">
                     <div class="cr-banner">
-                        <h2>{{ $pageTitle }}</h2>
+                        <h2>Categories</h2>
                     </div>
                     <div class="cr-banner-sub-title">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore lacus vel facilisis. </p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                            ut labore lacus vel facilisis. </p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12 col-12 md-30" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="600">
+            <div class="col-12" data-aos="fade-up" data-aos-duration="2000" data-aos-delay="600">
                 <div class="row">
                     <div class="col-12">
                         <div class="cr-shop-bredekamp">
                             <div class="cr-toggle">
+                                <a href="javascript:void(0)" class="shop_side_view">
+                                    <i class="ri-filter-line"></i>
+                                </a>
                                 <a href="javascript:void(0)" class="gridCol active-grid">
                                     <i class="ri-grid-line"></i>
                                 </a>
@@ -48,30 +51,28 @@
                                 </a>
                             </div>
                             <div class="center-content">
-                                <span>We found <strong>{{ $countProducts }}</strong> items for you!</span>
+                                <span>We found {{ $countProducts }} items for you!</span>
                             </div>
-                            {{-- <div class="cr-select">
-                                <label>Sort By :</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Featured</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                    <option value="4">Four</option>
-                                    <option value="5">Five</option>
-                                </select>
-                            </div> --}}
                         </div>
                     </div>
                 </div>
-                <div class="row col-100 mb-minus-24">
+                <div class="row col-50 mb-minus-24">
                     @foreach ($products as $product)
-                    <div class="col-xxl-4 col-xl-4 col-6 cr-product-box mb-24">
+                    <div class="col-lg-3 col-6 cr-product-box mb-24">
                         <div class="cr-product-card">
                             <div class="cr-product-image">
                                 <div class="cr-image-inner zoom-image-hover">
-                                    <img src="{{ asset('products/'.$product->main_picture) }}" alt="product-1"
-                                        width="100" height="100">
+                                    <img src="{{ asset('products/'. $product->main_picture) }}" width="100" height="100"
+                                        alt="product-1">
+                                </div>
+                                <div class="cr-side-view">
+                                    <a href="javascript:void(0)" class="wishlist">
+                                        <i class="ri-heart-line"></i>
+                                    </a>
+                                    <a class="model-oraganic-product" data-bs-toggle="modal" href="#quickview"
+                                        role="button">
+                                        <i class="ri-eye-line"></i>
+                                    </a>
                                 </div>
                                 <a class="cr-shopping-bag" href="javascript:void(0)">
                                     <i class="ri-shopping-bag-line"></i>
@@ -79,26 +80,12 @@
                             </div>
                             <div class="cr-product-details">
                                 <div class="cr-brand">
-                                    <h6 href="shop-left-sidebar.html">{{ $product->name }}</h6>
-                                    {{-- <div class="cr-star">
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-fill"></i>
-                                        <i class="ri-star-line"></i>
-                                        <p>(4.5)</p>
-                                    </div> --}}
+                                    <a href="#">{{ $product->cat->name }}</a>
                                 </div>
-                                <p href="product-left-sidebar.html" class="title">{{ $product->desc }}</p>
-                                {{-- <p class="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                                    eiusmod
-                                    tempor incididunt ut labore lacus vel facilisis.</p>
-                                <ul class="list">
-                                    <li><label>Brand :</label>ESTA BETTERU CO</li>
-                                    <li><label>Diet Type :</label>Vegetarian</li>
-                                    <li><label>Speciality :</label>Gluten Free, Sugar Free</li>
-                                </ul> --}}
-                                <p class="cr-price"><span class="new-price">${{ $product->price }}</span></p>
+                                <a href="#" class="title">{{ $product->name }}</a>
+                                <p class="text">{{ $product->desc }}</p>
+                                <p class="cr-price"><span class="new-price">${{ number_format($product->price,2)
+                                        }}</span></p>
                                 @if($product->status == 'out_of_stock')
                                 <p class="text-danger">This product is out of stock and currently not available</p>
                                 @elseif (auth()->check() && auth()->user()->role == 'buyer')
@@ -122,11 +109,12 @@
                 </div>
                 <nav aria-label="..." class="cr-pagination">
                     <ul class="pagination">
-                        <li>{{ $products->links() }}</li>
+                        <li class="page-item">{{ $products->links() }}</li>
                     </ul>
                 </nav>
             </div>
         </div>
     </div>
 </section>
+
 @endsection

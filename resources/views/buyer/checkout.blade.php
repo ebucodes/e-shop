@@ -48,7 +48,7 @@
                                             </div>
                                         </div>
                                         <div class="cr-pro-content cr-product-details">
-                                            <h5 class="cr-pro-title"><a href="product-left-sidebar.html">{{
+                                            <h5 class="cr-pro-title"><a href="#">{{
                                                     $item->product->name }}</a></h5>
                                             <p class="cr-price">Quantity: <span class="new-price">{{ $item->quantity
                                                     }}</span></p>
@@ -66,11 +66,13 @@
 
                             @php
                             $subTotal = 0;
+                            $delivery = 50;
                             @endphp
 
                             @foreach ($collection as $item)
                             @php
                             $subTotal += $item->product->price * $item->quantity;
+                            $delivery = 50;
                             @endphp
                             @endforeach
                             {{--
@@ -98,11 +100,11 @@
                                 </div>
                                 <div>
                                     <span class="text-left">Delivery Charges</span>
-                                    <span class="text-right">$80.00</span>
+                                    <span class="text-right">${{ number_format($delivery,2) }}</span>
                                 </div>
                                 <div class="cr-checkout-summary-total">
                                     <span class="text-left">Total Amount</span>
-                                    <span class="text-right">${{ number_format($subTotal + 80, 2) }}</span>
+                                    <span class="text-right">${{ number_format($subTotal + $delivery, 2) }}</span>
                                 </div>
                             </div>
                         </div>
@@ -162,106 +164,89 @@
             </div>
             <div class="cr-checkout-leftside col-lg-8 col-md-12 m-t-991">
                 <!-- checkout content Start -->
-                <div class="cr-checkout-content">
-                    <div class="cr-checkout-inner">
-                        <div class="cr-checkout-wrap">
-                            <div class="cr-checkout-block cr-check-bill">
-                                <h3 class="cr-checkout-title">Billing Details</h3>
-                                <div class="cr-bl-block-content">
-                                    <div class="cr-check-bill-form mb-minus-24">
-                                        <form action="#" method="post">
-                                            <span class="cr-bill-wrap">
-                                                <label>Address</label>
-                                                <input type="text" name="address" placeholder="Address Line 1">
-                                            </span>
-                                            <span class="cr-bill-wrap cr-bill-half">
-                                                <label>City *</label>
-                                                <span class="cr-bl-select-inner">
-                                                    <select name="cr_select_city" id="cr-select-city"
-                                                        class="cr-bill-select">
-                                                        <option selected disabled>City</option>
-                                                        <option value="1">City 1</option>
-                                                        <option value="2">City 2</option>
-                                                        <option value="3">City 3</option>
-                                                        <option value="4">City 4</option>
-                                                        <option value="5">City 5</option>
-                                                    </select>
-                                                </span>
-                                            </span>
-                                            <span class="cr-bill-wrap cr-bill-half">
-                                                <label>Post Code</label>
-                                                <input type="text" name="postalcode" placeholder="Post Code">
-                                            </span>
-                                            <span class="cr-bill-wrap cr-bill-half">
-                                                <label>Country *</label>
-                                                <span class="cr-bl-select-inner">
-                                                    <select name="cr_select_country" id="cr-select-country"
-                                                        class="cr-bill-select">
-                                                        <option selected disabled>Country</option>
-                                                        <option value="1">Country 1</option>
-                                                        <option value="2">Country 2</option>
-                                                        <option value="3">Country 3</option>
-                                                        <option value="4">Country 4</option>
-                                                        <option value="5">Country 5</option>
-                                                    </select>
-                                                </span>
-                                            </span>
-                                            <span class="cr-bill-wrap cr-bill-half">
-                                                <label>Region State</label>
-                                                <span class="cr-bl-select-inner">
-                                                    <select name="cr_select_state" id="cr-select-state"
-                                                        class="cr-bill-select">
-                                                        <option selected disabled>Region/State</option>
-                                                        <option value="1">Region/State 1</option>
-                                                        <option value="2">Region/State 2</option>
-                                                        <option value="3">Region/State 3</option>
-                                                        <option value="4">Region/State 4</option>
-                                                        <option value="5">Region/State 5</option>
-                                                    </select>
-                                                </span>
-                                            </span>
-                                            <hr>
-                                            {{-- <div class="cr-sb-title">
-                                                <h4 class="cr-sidebar-title">Payment Method</h4>
-                                            </div> --}}
-                                            <div class="cr-sb-block-content">
-                                                <div class="cr-checkout-pay">
-                                                    <div class="cr-pay-desc">Please select the preferred payment method
-                                                        to use on this
-                                                        order.</div>
-                                                    <span class="cr-pay-option">
-                                                        <span>
-                                                            <input type="radio" class="form-control" id="cash"
-                                                                name="radio-group" checked>
-                                                            <label for="cash">Cash On Delivery</label>
-                                                        </span>
-                                                    </span>
-                                                    <span class="cr-pay-option">
-                                                        <span>
-                                                            <input type="radio" class="form-control" id="card"
-                                                                name="radio-group">
-                                                            <label for="card">Card on Delivery</label>
-                                                        </span>
-                                                    </span>
-                                                    <span class="cr-pay-option">
-                                                        <span>
-                                                            <input type="radio" class="form-control" id="transfer"
-                                                                name="radio-group">
-                                                            <label for="transfer">Bank Transfer</label>
-                                                        </span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Billing Details</h4>
+                    </div>
+                    <form action="{{ route('storeOrder') }}" method="post" class="needs-validation" novalidate>
+                        @csrf
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-12 mb-3">
+                                    <label>Address</label>
+                                    <input type="text" name="address" class="form-control"
+                                        value="{{ $details->address ?? old('address') }}" placeholder="Address Line"
+                                        required>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label>City</label>
+                                    <input type="text" name="city" class="form-control"
+                                        value="{{ $details->city ?? old('city') }}" placeholder="Enter your city..."
+                                        required>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label>Postal Code</label>
+                                    <input type="text" name="postal" class="form-control"
+                                        placeholder="Enter Postal Code..."
+                                        value="{{ $details->postal ?? old('postal') }}" required>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label>Region / State</label>
+                                    <input type="text" name="state" class="form-control"
+                                        value="{{ $details->state ?? old('state') }}" placeholder="Enter State..."
+                                        required>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label>Country</label>
+                                    <input type="text" name="country" value="{{ $details->country ?? old('country') }}"
+                                        class="form-control" placeholder="Enter Country..." required>
+                                </div>
+                                <hr>
+                                <h6 class="text-center">Contact Details</h6>
+                                <div class="col-lg-6 mb-3">
+                                    <label>Email Address</label>
+                                    <input type="email" name="email" class="form-control"
+                                        value="{{ auth()->user()->email }}" readonly>
+                                </div>
+                                <div class="col-lg-6 mb-3">
+                                    <label>Phone Number</label>
+                                    <input type="tel" name="phone" class="form-control"
+                                        value="{{ auth()->user()->phone }}" readonly>
+                                </div>
+                                <hr>
+                                <h6 class="text-center">Payment Method</h6>
+                                <p class="text-center">Please select the preferred payment method
+                                    to use on this
+                                    order</p>
+                                <div class="col-lg-12 mb-3">
+                                    <span class="cr-pay-option">
+                                        <span>
+                                            <input type="radio" class="form-control" id="cash" name="payment"
+                                                value="cash" checked>
+                                            <label for="cash">Cash On Delivery</label>
+                                        </span>
+                                    </span>
+                                    <span class="cr-pay-option">
+                                        <span>
+                                            <input type="radio" class="form-control" id="card" name="payment"
+                                                value="card">
+                                            <label for="card">Card on Delivery</label>
+                                        </span>
+                                    </span>
+                                    <span class="cr-pay-option">
+                                        <span>
+                                            <input type="radio" class="form-control" id="transfer" name="payment"
+                                                value="transfer">
+                                            <label for="transfer">Bank Transfer</label>
+                                        </span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <span class="cr-check-order-btn">
-                            <a class="cr-button mt-30" href="#">Place Order</a>
-                        </span>
-                    </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-success">Place Order</button>
+                        </div>
+                    </form>
                 </div>
                 <!--cart content End -->
             </div>

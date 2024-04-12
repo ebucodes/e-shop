@@ -66,7 +66,7 @@
 
                 </li>
                 <li class="cr-sb-item">
-                    <a href="{{ route('subCategoryIndex') }}" class="cr-page-link">
+                    <a href="{{ route('orderHistory') }}" class="cr-page-link">
                         <i class="ri-bar-chart-grouped-line"></i>
                         <span class="condense">
                             <span class="hover-title">Order History
@@ -75,7 +75,14 @@
                     </a>
                 </li>
                 @elseif (auth()->user()->role == 'buyer')
-
+                <li class="cr-sb-item">
+                    <a href="{{ route('homePage') }}" class="cr-page-link">
+                        <i class="ri-radio-button-line"></i>
+                        <span class="condense">
+                            <span class="hover-title">Home</span>
+                        </span>
+                    </a>
+                </li>
                 @endif
 
                 <li class="cr-sb-item">

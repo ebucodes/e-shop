@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use App\Exceptions\InvalidInputException;
 use App\Models\Category;
+use App\Models\Order;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 class SellerController extends Controller
 {
@@ -18,8 +20,11 @@ class SellerController extends Controller
     public function dashboard()
     {
         $pageTitle = 'Seller Dashboard';
-        $logs = Activity::orderBy('created_at', 'DESC')->get();
-        return view('seller.dashboard', compact('pageTitle', 'logs'));
+        $orders = Order::where('seller', auth()->user()->email)->count();
+        // $totalPrice = Order::where('seller', auth()->user()->email)->sum('price');
+        $totalPrice = Order::where('seller', auth()->user()->email)
+            ->sum(DB::raw('price * quantity'));
+        return view('seller.dashboard', compact('pageTitle', 'orders', 'totalPrice'));
     }
 
     //
@@ -259,4 +264,37 @@ class SellerController extends Controller
     //         return back()->withErrors($validated);
     //     }
     // }
+
+    //
+    public function orderHistory()
+    {
+        $pageTitle = 'Order History';
+        $collection = Order::where('seller', auth()->user()->email)->orderBy('created_at', 'DESC')->get();
+        return view('seller.orderHistory', compact('pageTitle', 'collection'));
+    }
+
+    //
+    public function editOrder(Request $request)
+    {
+        $id = $request->id;
+        $validated = $request->validate([
+            'payment' => 'bail|required',
+            'status' => 'bail|required'
+        ]);
+
+        if ($validated) {
+            $order = Order::where('id', $id)->first();
+
+            $order->update(['payment' => $request->payment, 'status' => $request->status]);
+
+            // log activity
+            $logMessage = auth()->user()->email . " updated the status of an order";
+            logAction(auth()->user()->email, 'Updated the Status', $logMessage, $request->ip(), $request->userAgent());
+            //
+            return redirect()->back()->with('success', "Updated successfully");
+        } else {
+            // If there are validation errors, you can return to the form with the errors
+            return back()->withErrors($validated);
+        }
+    }
 }

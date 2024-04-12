@@ -22,11 +22,8 @@
                                 <p>{{ auth()->user()->email}}</p>
                             </div>
                             <ul class="border-top">
-                                <li><a href="team-profile.html">Profile</a></li>
+                                {{-- <li><a href="team-profile.html">Profile</a></li> --}}
                                 <li><a href="{{ route('myLogs') }}">My Logs</a></li>
-                                <li><a href="chatapp.html">Messages</a></li>
-                                <li><a href="project-overview.html">Projects</a></li>
-                                <li><a href="team-update.html">Settings</a></li>
                             </ul>
                             <ul class="border-top">
                                 <li><a href="{{ route('logOut') }}"><i class="ri-logout-circle-r-line"></i>Logout</a>

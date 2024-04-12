@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\Category;
+use App\Models\Product;
+use App\Observers\ProductObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,5 +31,8 @@ class AppServiceProvider extends ServiceProvider
             $categories = Category::where('status', 'active')->get();
             $view->with('categories', $categories);
         });
+
+        //
+        Product::observe(ProductObserver::class);
     }
 }

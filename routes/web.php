@@ -13,8 +13,15 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [WebsiteController::class, 'homePage'])->name('homePage');
+Route::get('', [WebsiteController::class, 'homePage'])->name('homePage');
 Route::get('products/{category}', [WebsiteController::class, 'productsPage'])->name('productsPage');
+Route::get('all-products', [WebsiteController::class, 'allProducts'])->name('allProducts');
+Route::get('about-us', [WebsiteController::class, 'aboutUs'])->name('aboutUs');
+Route::get('contact-us', [WebsiteController::class, 'contactUs'])->name('contactUs');
+Route::get('faq', [WebsiteController::class, 'faq'])->name('faq');
+Route::get('policy', [WebsiteController::class, 'policy'])->name('policy');
+
+
 
 Route::get('my-logs', [WebsiteController::class, 'myLogs'])->name('myLogs');
 Route::get('/login', [AuthController::class, 'loginForm'])->name('login');
@@ -59,12 +66,17 @@ Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
             Route::post('save-profile', [SellerController::class, 'saveProfile'])->name('sellerSaveProfile');
             // sub-category
             Route::group(['prefix' => 'product'], function () {
-                Route::get('/', [SellerController::class, 'productIndex'])->name('productIndex');
+                Route::get('', [SellerController::class, 'productIndex'])->name('productIndex');
                 Route::get('create', [SellerController::class, 'productCreate'])->name('productCreate');
                 Route::post('store', [SellerController::class, 'productStore'])->name('productStore');
                 Route::post('update', [SellerController::class, 'productUpdate'])->name('productUpdate');
                 Route::post('update-image', [SellerController::class, 'productUpdateImage'])->name('productUpdateImage');
                 Route::post('delete', [SellerController::class, 'productDelete'])->name('productDelete');
+            });
+            // order history
+            Route::group(['prefix' => 'orders'], function () {
+                Route::get('history', [SellerController::class, 'orderHistory'])->name('orderHistory');
+                Route::post('edit', [SellerController::class, 'editOrder'])->name('editOrder');
             });
         });
     });
@@ -72,7 +84,7 @@ Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
     // buyer
     Route::group(['middleware' => ['userRole:buyer']], function () {
         Route::group(['prefix' => 'buyer'], function () {
-            Route::get('dashboard', [BuyerController::class, 'dashboard'])->name('sellerDashboard');
+            // Route::get('dashboard', [BuyerController::class, 'dashboard'])->name('sellerDashboard');
             // cart
             Route::group(['prefix' => 'cart'], function () {
                 Route::get('all-items', [BuyerController::class, 'myCart'])->name('myCart');
@@ -82,6 +94,12 @@ Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
             // cart
             Route::group(['prefix' => 'checkout'], function () {
                 Route::get('', [BuyerController::class, 'checkOut'])->name('checkOut');
+                Route::post('place-order', [BuyerController::class, 'storeOrder'])->name('storeOrder');
+            });
+            // orders
+
+            Route::group(['prefix' => 'orders'], function () {
+                Route::get('history', [BuyerController::class, 'myOrder'])->name('myOrder');
             });
         });
     });

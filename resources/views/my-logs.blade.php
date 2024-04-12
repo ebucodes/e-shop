@@ -1,4 +1,4 @@
-@section('title',$pageTitle)
+@section('title',config('app.name') .' | '. $pageTitle)
 
 @extends('layouts.account.app')
 

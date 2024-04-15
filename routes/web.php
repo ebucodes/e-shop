@@ -59,6 +59,13 @@ Route::group(['middleware' => ['auth', 'preventBackHistory']], function () {
                 Route::post('update', [AdminController::class, 'subCategoryUpdate'])->name('subCategoryUpdate');
                 Route::post('delete', [AdminController::class, 'subCategoryDelete'])->name('subCategoryDelete');
             });
+            // user
+            Route::group(['prefix' => 'users'], function () {
+                Route::get('/', [AdminController::class, 'adminIndex'])->name('adminIndex');
+                Route::post('store', [AdminController::class, 'adminStore'])->name('adminStore');
+                Route::post('update', [AdminController::class, 'adminUpdate'])->name('adminUpdate');
+                Route::post('delete', [AdminController::class, 'adminDelete'])->name('adminDelete');
+            });
         });
     });
 

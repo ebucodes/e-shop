@@ -10,6 +10,7 @@ use App\Models\SubCategory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -178,59 +179,80 @@ class AdminController extends Controller
         //
         return redirect()->back()->with('success', "Deleted successfully");
     }
-    //
-    public function blogIndex()
-    {
-        $pageTitle = 'Blog';
-        return view('admin.dashboard', compact('pageTitle'));
-    }
-
-    //
-    public function blogStore()
-    {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
-    }
-
-    //
-    public function blogUpdate()
-    {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
-    }
-
-    //
-    public function blogDelete()
-    {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
-    }
 
     //
     public function adminIndex()
     {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
+        $pageTitle = 'Admin';
+        $collection = User::where('role', 'admin')->orderBy('created_at', 'DESC')->get();
+        return view('admin.admin', compact('pageTitle', 'collection'));
     }
 
     //
-    public function adminStore()
+    public function adminStore(Request $request)
     {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
+        $validated = $request->validate([
+            'firstName' => 'bail|required',
+            'lastName' => 'bail|required',
+            'email' => 'bail|required|email',
+            'phone' => 'bail|required|numeric',
+            'password' => 'bail|required|string',
+        ]);
+
+        if ($validated) {
+            $create = new User();
+            $create->firstName = $request->firstName;
+            $create->lastName = $request->lastName;
+            $create->email = $request->email;
+            $create->phone = $request->phone;
+            $create->password = Hash::make($request->password);
+            $create->role = 'admin';
+            $create->save();
+            // log activity
+            $logMessage = auth()->user()->email . " created a new admin";
+            logAction(auth()->user()->email, 'Created a Admin', $logMessage, $request->ip(), $request->userAgent());
+            //
+            return redirect()->back()->with('success', "Created successfully");
+        } else {
+            // If there are validation errors, you can return to the form with the errors
+            return back()->withErrors($validated);
+        }
     }
 
     //
-    public function adminUpdate()
+    public function adminUpdate(Request $request)
     {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
+        $id = $request->id;
+        $validated = $request->validate([
+            'firstName' => 'bail|required',
+            'lastName' => 'bail|required',
+            'phone' => 'bail|required|numeric'
+        ]);
+
+        if ($validated) {
+            $admin = User::find($id);
+            $admin->update(['firstName' => $request->firstName, 'lastName' => $request->lastName, 'phone' => $request->phone]);
+            // log activity
+            $logMessage = auth()->user()->email . " updated an admin";
+            logAction(auth()->user()->email, 'Updated an Admin', $logMessage, $request->ip(), $request->userAgent());
+            //
+            return redirect()->back()->with('success', "Updated successfully");
+        } else {
+            // If there are validation errors, you can return to the form with the errors
+            return back()->withErrors($validated);
+        }
     }
 
     //
-    public function adminDelete()
+    public function adminDelete(Request $request)
     {
-        $pageTitle = 'Category';
-        return view('admin.dashboard', compact('pageTitle'));
+        $id = $request->id;
+        $admin = User::find($id);
+        $admin->delete();
+        // log activity
+        $logMessage = auth()->user()->email . " deleted an admin";
+        logAction(auth()->user()->email, 'Deleted an Admin', $logMessage, $request->ip(), $request->userAgent());
+        //
+        return redirect()->back()->with('success', "Deleted successfully");
     }
 }

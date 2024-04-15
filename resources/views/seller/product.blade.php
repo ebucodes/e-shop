@@ -11,7 +11,13 @@
                 <h5>{{ $pageTitle }}</h5>
             </div>
         </div>
-
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <a href="{{ route('productCreate') }}" class="btn btn-primary">
+                    {{"Create ". $pageTitle }}
+                </a>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="cr-card card-default product-list">

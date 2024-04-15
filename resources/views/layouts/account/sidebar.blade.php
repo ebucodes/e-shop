@@ -20,9 +20,9 @@
                     </a>
                 </li>
                 <li class="cr-sb-item">
-                    <a href="buttons.html" class="cr-page-link">
+                    <a href="{{ route('adminIndex') }}" class="cr-page-link">
                         <i class="ri-account-circle-fill"></i><span class="condense"><span
-                                class="hover-title">Admin</span></span></a>
+                                class="hover-title">Admins</span></span></a>
                 </li>
                 <li class="cr-sb-item">
                     <a href="{{ route('categoryIndex') }}" class="cr-page-link">

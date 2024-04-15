@@ -72,9 +72,8 @@
                     </div>
                     <div class="cr-info-content">
                         <h4 class="heading">Address</h4>
-                        <p><a href="javascript:void(0)"><i class="ri-map-pin-line"></i> &nbsp; 140 Ruami Moraes
-                                Filho,
-                                987 - Salvador - MA, 40352, Brazil.</a></p>
+                        <p><a href="javascript:void(0)"><i class="ri-map-pin-line"></i> &nbsp;UCM Lee's Summit Campus
+                                1101 NW Innovation Pkwy Lee's Summit, MO 64086</a></p>
                     </div>
                 </div>
             </div>

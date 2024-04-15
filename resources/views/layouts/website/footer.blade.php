@@ -18,7 +18,7 @@
                     </h4>
                     <ul class="cr-footer-links cr-footer-dropdown">
                         <li class="location-icon">
-                            51 Green St.Huntington ohaio beach ontario, NY 11746 KY 4783, USA.
+                            UCM Lee's Summit Campus 1101 NW Innovation Pkwy Lee's Summit, MO 64086
                         </li>
                         <li class="mail-icon">
                             <a href="javascript:void(0)">example@email.com</a>

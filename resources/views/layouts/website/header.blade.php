@@ -268,13 +268,10 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <a class="dropdown-item" href="register.html">Register</a>
+                                        <a class="dropdown-item" href="{{ route('register') }}">Register</a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="checkout.html">Checkout</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="login.html">Login</a>
+                                        <a class="dropdown-item" href="{{ route('login') }}">Login</a>
                                     </li>
                                 </ul>
                             </li>

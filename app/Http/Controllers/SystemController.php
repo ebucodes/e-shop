@@ -59,7 +59,6 @@ class SystemController extends Controller
 
     public function refreshDatabase()
     {
-
         Artisan::call('migrate:fresh');
         Artisan::call('db:seed');
         Artisan::call('optimize:clear');
